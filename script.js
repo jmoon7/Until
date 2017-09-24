@@ -11,37 +11,56 @@ function Until() {
 	this.settingsClicked = false;
 	this.countdown;
 	this.tempName, this.tempDate;
-	this.bgColors = ['#35ead5, #3493e5', '#f44292, #f45641', '#f47641, #ebf441', '#4ff441, #bbf441'];
-	this.bgIndex;
+	this.bgColors = ['#35ead5, #3493e5', '#f44292, #f45641', '#f47641, #ebf441'];
+	this.bgImages = [
+		'image0.jpeg',
+		'image1.jpeg',
+	];
+	this.bgSwitch;
+	this.bgColorIndex;
+	this.bgImageIndex;
 
-	this.container = document.getElementById('container'); 
-	this.introName = document.getElementById('introName'); 
-	this.formName = document.getElementById('formName'); 
-	this.inputName = document.getElementById('inputName'); 
-	this.introDate = document.getElementById('introDate'); 
-	this.formDate = document.getElementById('formDate'); 
-	this.inputDate = document.getElementById('inputDate'); 
-	this.main = document.getElementById('main'); 
-	this.mainDate = document.getElementById('mainDate'); 
-	this.mainName = document.getElementById('mainName'); 
-	this.settings = document.getElementById('settings'); 
-	this.settingsOption = document.getElementById('settingsOption'); 
+	this.container = document.getElementById('container');
+	this.introName = document.getElementById('introName');
+	this.formName = document.getElementById('formName');
+	this.inputName = document.getElementById('inputName');
+	this.introDate = document.getElementById('introDate');
+	this.formDate = document.getElementById('formDate');
+	this.inputDate = document.getElementById('inputDate');
+	this.main = document.getElementById('main');
+	this.mainDate = document.getElementById('mainDate');
+	this.mainName = document.getElementById('mainName');
+	this.settings = document.getElementById('settings');
+	this.settingsOption = document.getElementById('settingsOption');
 	this.settingsButton = document.getElementById('settingsButton');
-	this.settingsOptionCountdown = document.getElementById('newCountdown'); 
-	this.settingsOptionBackground = document.getElementById('backgroundColor');
+	this.settingsOptionCountdown = document.getElementById('newCountdown');
+	this.settingsOptionBackgroundColor = document.getElementById('backgroundColor');
+	this.settingsOptionBackgroundImage = document.getElementById('backgroundImage');
 
 	this.submitName = this.submitName.bind(this);
 	this.handleInputDate = this.handleInputDate.bind(this);
 	this.settingsClick = this.settingsClick.bind(this);
 	this.newCountdown = this.newCountdown.bind(this);
 	this.backgroundColor = this.backgroundColor.bind(this);
+	this.backgroundImage = this.backgroundImage.bind(this);
 
-	if (localStorage.getItem('bgIndex') !== null) {
-		this.bgIndex = parseInt(localStorage.getItem('bgIndex'));
-		this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgIndex] + ')'; 
+	var localBgSwitch = localStorage.getItem('bgSwitch');
+	if (localBgSwitch !== null) {
+		this.bgImageIndex = parseInt(localStorage.getItem('bgImageIndex'));
+		this.bgColorIndex = parseInt(localStorage.getItem('bgColorIndex'));
+		if (localBgSwitch == 'image') {
+			this.container.style.backgroundImage = 'url(' + this.bgImages[this.bgImageIndex] + ')';
+			this.container.style.backgroundSize = 'cover';
+		} else if (localBgSwitch = 'color') {
+			this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgColorIndex] + ')';
+		}
 	} else {
-		this.bgIndex = 0;
-		localStorage.setItem('bgIndex', 0);
+		this.bgColorIndex = 0;
+		this.bgImageIndex = 0;
+		this.bgSwitch = 'image';
+		localStorage.setItem('bgColorIndex', 0);
+		localStorage.setItem('bgImageIndex', 0);
+		localStorage.setItem('bgSwitch', 'image');
 	}
 
 	if (localStorage.getItem('initialized') === 'true') {
@@ -55,11 +74,11 @@ function Until() {
 Until.prototype.submitName = function(event) {
 	event.preventDefault();
 	this.tempName = this.inputName.value;
- 
+
 	Velocity(this.introName, { opacity: 0 }, { duration: this.transitionShort });
-	setTimeout(function() { 
+	setTimeout(function() {
 		this.introName.style.display = 'none';
-		this.formName.reset(); 
+		this.formName.reset();
 		this.formName.removeEventListener('submit', this.submitName);
 	}, this.transitionShort);
 
@@ -76,16 +95,16 @@ Until.prototype.handleInputDate = function(e) {
 			alert("Ok, but by this time you might not exist. Let's wait for something... closer :)");
 		} else {
 			this.tempDate = inputDate.value;
-			this.submitDate();			
+			this.submitDate();
 		}
 	}
 }
 
 Until.prototype.submitDate = function() {
 	Velocity(this.introDate, { opacity: 0 }, { duration: this.transitionShort });
-	setTimeout(function() { 
-		this.introDate.style.display = 'none'; 
-		this.formDate.reset(); 
+	setTimeout(function() {
+		this.introDate.style.display = 'none';
+		this.formDate.reset();
 		this.inputDate.removeEventListener('keypress', this.handleInputDate);
 	}.bind(this), this.transitionShort);
 
@@ -106,7 +125,7 @@ Until.prototype.initialize = function() {
 	this.mainDate.textContent = this.counter(date);
 
 	// Then every 1 second
-	this.countdown = setInterval(function() { 
+	this.countdown = setInterval(function() {
 		this.mainDate.textContent = this.counter(date);
 	}.bind(this), 1000);
 
@@ -117,7 +136,8 @@ Until.prototype.initialize = function() {
 
 	this.settingsButton.addEventListener('click', this.settingsClick);
 	this.settingsOptionCountdown.addEventListener('click', this.newCountdown);
-	this.settingsOptionBackground.addEventListener('click', this.backgroundColor);
+	this.settingsOptionBackgroundColor.addEventListener('click', this.backgroundColor);
+	this.settingsOptionBackgroundImage.addEventListener('click', this.backgroundImage);
 }
 
 Until.prototype.settingsClick = function() {
@@ -141,7 +161,7 @@ Until.prototype.newCountdown = function() {
 	Velocity(this.settingsOption, { opacity: 0, translateY: '10px' }, { duration: this.transitionShort });
 	Velocity(this.main, { opacity: 0, translateY: '10px' }, { duration: this.transitionShort });
 	Velocity(this.settings, { opacity: 0, translateY: '10px' }, { duration: this.transitionShort });
-	setTimeout(function() { 
+	setTimeout(function() {
 		this.main.style.display = 'none';
 		this.settings.style.display = 'none';
 		this.settingsOption.style.display = 'none';
@@ -169,7 +189,7 @@ Until.prototype.counter = function(date) {
 	var days = Math.floor(time);
 	var message = "";
 	if (days > 0) {
-		message += days + " days "; 
+		message += days + " days ";
 	}
 	if (hours > 0) {
 		message += hours + " hours ";
@@ -182,7 +202,17 @@ Until.prototype.counter = function(date) {
 }
 
 Until.prototype.backgroundColor = function() {
-	this.bgIndex = (this.bgIndex + 1) % this.bgColors.length;
-	localStorage.setItem('bgIndex', this.bgIndex);
-	this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgIndex] + ')'; 
+	this.bgColorIndex = (this.bgColorIndex + 1) % this.bgColors.length;
+	localStorage.setItem('bgSwitch', 'color');
+	localStorage.setItem('bgColorIndex', this.bgColorIndex);
+	this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgColorIndex] + ')';
+}
+
+Until.prototype.backgroundImage = function() {
+	this.bgImageIndex = (this.bgImageIndex + 1) % this.bgImages.length;
+	localStorage.setItem('bgSwitch', 'image');
+	localStorage.setItem('bgImageIndex', this.bgImageIndex);
+	this.container.style.backgroundImage = 'url(' + this.bgImages[this.bgImageIndex] + ')';
+	this.container.style.backgroundSize = 'cover';
+
 }
