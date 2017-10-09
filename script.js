@@ -9,16 +9,18 @@ function Until() {
 	this.transitionShort = 300;
 	this.transitionLong = 900;
 	this.settingsClicked = false;
+	this.backgroundClicked = false;
 	this.countdown;
 	this.tempName, this.tempDate;
-	this.bgColors = ['#35ead5, #3493e5', '#f44292, #f45641', '#f47641, #ebf441'];
-	this.bgImages = [
-		'image0.jpeg',
-		'image1.jpeg',
-	];
-	this.bgSwitch;
-	this.bgColorIndex;
-	this.bgImageIndex;
+
+	this.bgKey = localStorage.getItem('bgKey');
+	this.bgOptions = {
+		'color1': {'type': 'color', 'value': '#35ead5, #3493e5'},
+		'color2': {'type': 'color', 'value': '#f44292, #f45641'},
+		'color3': {'type': 'color', 'value': '#f47641, #ebf441'},
+		'image1': {'type': 'image', 'value': 'image0.jpeg'},
+		'image2': {'type': 'image', 'value': 'image1.jpeg'}
+	};
 
 	this.container = document.getElementById('container');
 	this.introName = document.getElementById('introName');
@@ -34,35 +36,33 @@ function Until() {
 	this.settingsOption = document.getElementById('settingsOption');
 	this.settingsButton = document.getElementById('settingsButton');
 	this.settingsOptionCountdown = document.getElementById('newCountdown');
-	this.settingsOptionBackgroundColor = document.getElementById('backgroundColor');
-	this.settingsOptionBackgroundImage = document.getElementById('backgroundImage');
+	this.settingsOptionBackground = document.getElementById('background');
+	this.backgroundOptions = document.getElementById('backgroundOptions');
+	this.backgroundOptionsList = document.getElementById('backgroundOptionsList');
+	this.backgroundExit = document.getElementById('backgroundExit');
+	this.whiteOverlay = document.getElementById('whiteOverlay');
 
 	this.submitName = this.submitName.bind(this);
 	this.handleInputDate = this.handleInputDate.bind(this);
 	this.settingsClick = this.settingsClick.bind(this);
 	this.newCountdown = this.newCountdown.bind(this);
-	this.backgroundColor = this.backgroundColor.bind(this);
-	this.backgroundImage = this.backgroundImage.bind(this);
+	this.background = this.background.bind(this);
+	this.buildBackgroundOptions = this.buildBackgroundOptions.bind(this);
+	this.loadImage = this.loadImage.bind(this);
 
-	var localBgSwitch = localStorage.getItem('bgSwitch');
-	if (localBgSwitch !== null) {
-		this.bgImageIndex = parseInt(localStorage.getItem('bgImageIndex'));
-		this.bgColorIndex = parseInt(localStorage.getItem('bgColorIndex'));
-		if (localBgSwitch == 'image') {
-			this.container.style.backgroundImage = 'url(' + this.bgImages[this.bgImageIndex] + ')';
-			this.container.style.backgroundSize = 'cover';
-		} else if (localBgSwitch = 'color') {
-			this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgColorIndex] + ')';
-		}
+	// Add buttons with listeners for background options
+	this.buildBackgroundOptions();
+
+	// Retrieve and set background
+	if (this.bgKey !== null) {
+		var entry = this.bgOptions[this.bgKey];
+		this.loadImage(entry);
 	} else {
-		this.bgColorIndex = 0;
-		this.bgImageIndex = 0;
-		this.bgSwitch = 'image';
-		localStorage.setItem('bgColorIndex', 0);
-		localStorage.setItem('bgImageIndex', 0);
-		localStorage.setItem('bgSwitch', 'image');
+		this.bgKey = 'color1';
+		localStorage.setItem('bgKey', 'color1');
 	}
 
+	// Initialize or create a new countdown
 	if (localStorage.getItem('initialized') === 'true') {
 		this.initialize();
 	} else {
@@ -136,8 +136,7 @@ Until.prototype.initialize = function() {
 
 	this.settingsButton.addEventListener('click', this.settingsClick);
 	this.settingsOptionCountdown.addEventListener('click', this.newCountdown);
-	this.settingsOptionBackgroundColor.addEventListener('click', this.backgroundColor);
-	this.settingsOptionBackgroundImage.addEventListener('click', this.backgroundImage);
+	this.settingsOptionBackground.addEventListener('click', this.background);
 }
 
 Until.prototype.settingsClick = function() {
@@ -172,6 +171,42 @@ Until.prototype.newCountdown = function() {
 	Velocity(this.introName, { opacity: 1, translateY: '-10px' }, { duration: this.transitionLong });
 }
 
+Until.prototype.background = function() {
+	if (this.backgroundClicked === true) {
+		this.backgroundClicked = false;
+		Velocity(this.backgroundOptions, { opacity: 0 }, { duration: this.transitionShort });
+		setTimeout(function() { this.backgroundOptions.style.display = 'none'; }.bind(this), this.transitionShort);
+	} else {
+		this.settingsClick()
+		this.backgroundClicked = true;
+		this.backgroundOptions.style.display = 'block';
+		this.backgroundExit.addEventListener('click', this.background);
+		Velocity(this.backgroundOptions, { opacity: 1 }, { duration: this.transitionShort });
+	}
+}
+
+Until.prototype.buildBackgroundOptions = function() {
+	var backgroundOptionsListHtml = ''
+	for (var key in this.bgOptions) {
+		backgroundOptionsListHtml += '<button class="input buttonInput" id="' + key + '">' + key + '</button>';
+	}
+	this.backgroundOptionsList.innerHTML = backgroundOptionsListHtml;
+	for (var key in this.bgOptions) {
+		(function(key, dict, container) {
+			document.getElementById(key).addEventListener('click', function() {
+				localStorage.setItem('bgKey', key);
+				var entry = dict[key];
+				if (entry.type == 'color') {
+					container.style.background = 'linear-gradient(45deg, ' + entry.value + ')';
+				} else if (entry.type == 'image') {
+					container.style.backgroundImage = 'url(' + entry.value + ')';
+					container.style.backgroundSize = 'cover';
+				}
+			});
+		}(key, this.bgOptions, this.container));
+	}
+}
+
 Until.prototype.counter = function(date) {
 	// Locale conversion
 	var localeConvertedDate = new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000;
@@ -201,18 +236,23 @@ Until.prototype.counter = function(date) {
 	return message;
 }
 
-Until.prototype.backgroundColor = function() {
-	this.bgColorIndex = (this.bgColorIndex + 1) % this.bgColors.length;
-	localStorage.setItem('bgSwitch', 'color');
-	localStorage.setItem('bgColorIndex', this.bgColorIndex);
-	this.container.style.background = 'linear-gradient(45deg, ' + this.bgColors[this.bgColorIndex] + ')';
-}
-
-Until.prototype.backgroundImage = function() {
-	this.bgImageIndex = (this.bgImageIndex + 1) % this.bgImages.length;
-	localStorage.setItem('bgSwitch', 'image');
-	localStorage.setItem('bgImageIndex', this.bgImageIndex);
-	this.container.style.backgroundImage = 'url(' + this.bgImages[this.bgImageIndex] + ')';
-	this.container.style.backgroundSize = 'cover';
-
+Until.prototype.loadImage = function(entry) {
+	if (entry.type == 'image') {
+		var img = new Image();
+		img.onload = function() {
+			this.container.style.backgroundImage = 'url(' + entry.value + ')';
+			this.container.style.backgroundSize = 'cover';
+			Velocity(this.whiteOverlay, { opacity: 0 }, { duration: this.transitionLong });
+			setTimeout(function() {
+				this.whiteOverlay.style.display = 'none';
+			}, this.transitionLong);
+		}.bind(this);
+		img.src = entry.value;
+	} else if (entry.type = 'color') {
+		this.container.style.background = 'linear-gradient(45deg, ' + entry.value + ')';
+		Velocity(this.whiteOverlay, { opacity: 0 }, { duration: this.transitionLong });
+		setTimeout(function() {
+			this.whiteOverlay.style.display = 'none';
+		}, this.transitionLong);
+	}
 }

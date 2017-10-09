@@ -1,11 +1,11 @@
 @font-face {
-    font-family: "Roboto Slab Light";
-    src: url(RobotoSlab-Light.ttf) format("truetype");
+    font-family: "Avenir Light";
+    src: url(AvenirLTStd-Light.otf) format("truetype");
 }
 
 @font-face {
-    font-family: "Roboto Slab Regular";
-    src: url(RobotoSlab-Regular.ttf) format("truetype");
+    font-family: "Avenir Regular";
+    src: url(AvenirLTStd-Book.otf) format("truetype");
 }
 
 html, body {
@@ -13,8 +13,15 @@ html, body {
 	height: 100%;
 	width: 100%;
 	margin: 0;
-	font-family: 'Roboto Slab Regular', serif;
+	font-family: 'Avenir Regular', serif;
 	color: white;
+}
+
+#whiteOverlay {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 1;
 }
 
 #container {
@@ -49,7 +56,7 @@ html, body {
 }
 
 .input {
-	font-family: 'Roboto Slab Regular', serif;
+	font-family: 'Avenir Regular', serif;
 	color: white;
 	text-align: center;
 	background-color: transparent;
@@ -79,7 +86,7 @@ html, body {
 }
 
 #mainDate {
-	font-family: 'Roboto Slab Light', serif;
+	font-family: 'Avenir Light', serif;
 	font-size: 1.5em;
 	font-style: italic;
 }
@@ -99,11 +106,12 @@ html, body {
 	margin: 5px;
 }
 
-#settingsButton, #newCountdown, #backgroundColor, #backgroundImage {
+.buttonInput {
 	cursor: pointer;
+  font-size: 1em;
 }
 
-#newCountdown:focus, #backgroundColor:focus {
+.buttonInput:focus {
 	outline: none;
 }
 
@@ -111,6 +119,26 @@ html, body {
 	display: none;
 	opacity: 0;
 	background-color: rgba(0,0,0,0.3);
-	border-radius: 100px;
+	border-radius: 50px;
 	padding: 1px 20px 1px 0;
+}
+
+#backgroundOptions {
+  display: none;
+  opacity: 0;
+  position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+  padding: 10%;
+  width: 50%;
+  height: 50%;
+  z-index: 100;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 50px;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+}
+
+#backgroundHeader {
+  font-size: 1.5em;
 }

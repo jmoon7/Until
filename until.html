@@ -41,15 +41,25 @@
 			<div id="settings">
 				<div id="settingsOption">
 					<ul>
-						<li> <input class="input" id="newCountdown" type="button" value="New countdown"/> </li>
-						<li> <input class="input" id="backgroundColor" type="button" value="Background color"/> </li>
-						<li> <input class="input" id="backgroundImage" type="button" value="Background image"/> </li>
+						<li>
+							<button class="input buttonInput" id="newCountdown"> New countdown </button>
+						</li>
+						<li>
+							<button class="input buttonInput" id="background"> Change background </button>
+						</li>
 					</ul>
 				</div>
-				<div id="settingsButton">
+				<div class="buttonInput" id="settingsButton">
 					<img src="settings.png" width=30px height=30px/>
 				</div>
 			</div>
+			<div id="backgroundOptions">
+				<div id="backgroundHeader"> Background </div>
+				<input class="input buttonInput" id="backgroundExit" type="button" value="close"/>
+				<div id="backgroundOptionsList">
+				</div>
+			</div>
+			<div id="whiteOverlay"/>
 		</div>
 	</body>
 </html>
