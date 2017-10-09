@@ -54,13 +54,12 @@ function Until() {
 	this.buildBackgroundOptions();
 
 	// Retrieve and set background
-	if (this.bgKey !== null) {
-		var entry = this.bgOptions[this.bgKey];
-		this.loadImage(entry);
-	} else {
+	if (this.bgKey == null) {
 		this.bgKey = 'color1';
 		localStorage.setItem('bgKey', 'color1');
 	}
+	var entry = this.bgOptions[this.bgKey];
+	this.loadImage(entry);
 
 	// Initialize or create a new countdown
 	if (localStorage.getItem('initialized') === 'true') {
