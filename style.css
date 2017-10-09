@@ -142,3 +142,7 @@ html, body {
 #backgroundHeader {
   font-size: 1.5em;
 }
+
+.bgOption {
+  margin: 10px;
+}
