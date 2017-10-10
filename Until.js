@@ -11,7 +11,8 @@ var bgOptions = {
 	'color2': {'type': 'color', 'value': '#f44292, #f45641'},
 	'color3': {'type': 'color', 'value': '#f47641, #ebf441'},
 	'image1': {'type': 'image', 'value': 'image0.jpeg'},
-	'image2': {'type': 'image', 'value': 'image1.jpeg'}
+	'image2': {'type': 'image', 'value': 'image1.jpeg'},
+	'image3': {'type': 'image', 'value': 'image2.jpeg'}
 };
 
 function Until() {

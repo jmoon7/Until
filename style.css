@@ -15,6 +15,7 @@ html, body {
 	margin: 0;
 	font-family: 'Avenir Regular', serif;
 	color: white;
+  font-size: 1em;
 }
 
 #whiteOverlay {
@@ -78,11 +79,10 @@ html, body {
 #main {
 	opacity: 0;
 	display: none;
-	font-size: 1.5em;
 }
 
 #mainName {
-	font-size: 2em;
+	font-size: 3.5em;
 }
 
 #mainDate {
