@@ -42,9 +42,10 @@ function Until() {
 	this.Background.loadImage(entry);
 
 	if (localStorage.getItem('initialized') !== 'true') {
+		this.newCountdown();
+	} else {
+		this.initialize();
 	}
-	this.initialize();
-
 }
 
 Until.prototype.initialize = function() {
