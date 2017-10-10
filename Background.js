@@ -26,7 +26,13 @@ Background.prototype.initialize = function() {
 			firstImg = true;
 			backgroundOptionsListHtml += '<br/>';
 		}
-		backgroundOptionsListHtml += '<button class="input buttonInput bgOption" id="' + key + '">' + key + '</button>';
+		backgroundOptionsListHtml +=
+			'<span class="bgOption">' +
+				'<button class="input buttonInput" id="' + key + '">' +
+					'<div class="bgOptionThumb" id="' + key + 'Thumb' + '"> </div>' +
+					key + 
+				'</button>' +
+			'</span>';
 	}
 	this.backgroundOptionsList.innerHTML = backgroundOptionsListHtml;
 	for (var key in bgOptions) {
@@ -42,6 +48,12 @@ Background.prototype.initialize = function() {
 				}
 			});
 		}(key, bgOptions, this.container));
+	}
+	for (var key in bgOptions) {
+		var entry = bgOptions[key];
+		if (entry.type === 'color') {
+			document.getElementById(key + 'Thumb').style.backgroundColor = entry.thumb;
+		}
 	}
 }
 

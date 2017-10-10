@@ -134,15 +134,27 @@ html, body {
   width: 50%;
   height: 50%;
   z-index: 100;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.6);
   border-radius: 50px;
   box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
 }
 
 #backgroundHeader {
-  font-size: 1.5em;
+  font-size: 2em;
+  margin-bottom: 10%;
+}
+
+#backgroundOptionsList {
+  margin-bottom: 10%;
 }
 
 .bgOption {
+  display: inline-block;
+}
+
+.bgOptionThumb {
+  width: 50px;
+  height: 50px;
+  background-color: white;
   margin: 10px;
 }

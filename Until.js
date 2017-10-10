@@ -6,14 +6,15 @@ window.onload = function() {
 
 var transitionShort = 300;
 var transitionLong = 900;
+var imagesLength = 3;
 var bgOptions = {
-	'color1': {'type': 'color', 'value': '#35ead5, #3493e5'},
-	'color2': {'type': 'color', 'value': '#f44292, #f45641'},
-	'color3': {'type': 'color', 'value': '#f47641, #ebf441'},
-	'image1': {'type': 'image', 'value': 'image0.jpeg'},
-	'image2': {'type': 'image', 'value': 'image1.jpeg'},
-	'image3': {'type': 'image', 'value': 'image2.jpeg'}
+	'color1': {'type': 'color', 'value': '#35ead5, #3493e5', 'thumb': '#3493e5'},
+	'color2': {'type': 'color', 'value': '#f44292, #f45641', 'thumb': '#f44292'},
+	'color3': {'type': 'color', 'value': '#f47641, #ebf441', 'thumb': '#f47641'},
 };
+for (var i = 0; i < imagesLength; i++) {
+	bgOptions['image' + i] = {'type': 'image', 'value': 'image' + i + '.jpeg'};
+}
 
 function Until() {
 	this.NewCountdown = new NewCountdown();
