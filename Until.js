@@ -13,7 +13,7 @@ var bgOptions = {
 	'color3': {'type': 'color', 'value': '#f47641, #ebf441', 'thumb': '#f47641'},
 };
 for (var i = 0; i < imagesLength; i++) {
-	bgOptions['image' + i] = {'type': 'image', 'value': 'image' + i + '.jpeg'};
+	bgOptions['image' + i] = {'type': 'image', 'value': 'images/image' + i + '.jpeg'};
 }
 
 function Until() {
