@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Until",
   "description": "A clean, simple new tab countdown extension to wait for exiciting dates.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "chrome_url_overrides" : {
     "newtab": "until.html"
   },
